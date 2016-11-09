@@ -1,6 +1,6 @@
 # Práctica: Práctica: Autenticación OAuth con Passport. Práctica 7 de SYTW
 
-![Version NPM](https://img.shields.io/npm/v/gitbook-start-oauth-rafadanipedro.svg)
+![Version NPM](https://img.shields.io/npm/v/plugin-iaas-oauth-rafadanipedro.svg)
 
 ## Descripción de la práctica
  * [Gitbook de la práctica](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/practicas/practicapassport.html)
