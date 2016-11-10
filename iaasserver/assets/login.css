@@ -1,0 +1,49 @@
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: #d3d3d3;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+#loguineo{
+    margin-top: 50px;
+}
+#recuadro{
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.btn-large{
+    width: 100%;
+    background-color: black;
+}
+
+.btn-large:hover{
+    background-color: grey;
+}
+
+footer.page-footer{
+    background-color: black;
+    padding-top: 0px;
+}
+
+input[type=email]:focus:not([readonly]),input[type=password]:focus:not([readonly]){
+    border-bottom: 1px solid grey;
+    box-shadow: 0 1px 0 0 grey;
+}
+.input-field
+.prefix.active,input[type=email]:focus:not([readonly])+label,input[type=password]:focus:not([readonly])+label{
+    color: grey;
+}
+
+.enlaces_footer:hover{
+    color: #b7b7b7 !important;
+}
+
+#col_boton_github{
+    margin-bottom: 20px;
+
+}
