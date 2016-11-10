@@ -1,72 +1,38 @@
-var express = require('express');
-var colors = require('colors');
-var app = express();
+const express = require('express');
+const passport = require('passport');
+const { Strategy } = require('passport-github')
+const { ensureLoggedIn } = require('connect-ensure-login')
+const github = require ('octonode')
+const logger = require('morgan')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const path = require ('path')
 
-app.use(express.static('gh-pages'));
+const { host, clientID, clientSecret, organizacion } = require('./config.json')
 
-app.listen(8080);
+const app = express();
 
-console.log("SERVIDOR PRACTICA 7 SYTW rafadanipedro".green);
-console.log("Ejecutando servidor".green);
-
-var express = require('express');
-var passport = require('passport');
-var Strategy = require('passport-github').Strategy;
-
-
-// Configure the GitHub strategy for use by Passport.
-//
-// OAuth 2.0-based strategies require a `verify` function which receives the
-// credential (`accessToken`) for accessing the GitHub API on the user's
-// behalf, along with the user's profile.  The function must invoke `cb`
-// with a user object, which will be set at `req.user` in route handlers after
-// authentication.
 passport.use(new Strategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/login/github/return'
+    clientID: clientID,
+    clientSecret: clientSecret,
+    callbackURL: `http://${host}/login/github/return`
   },
-  function(accessToken, refreshToken, profile, cb) {
-    // In this example, the user's GitHub profile is supplied as the user
-    // record.  In a production-quality application, the GitHub profile should
-    // be associated with a user record in the application's database, which
-    // allows for account linking and authentication with other identity
-    // providers.
-    return cb(null, profile);
-  }));
+  (accessToken, refreshToken, profile, cb) => cb(null, profile)))
 
 
-// Configure Passport authenticated session persistence.
-//
-// In order to restore authentication state across HTTP requests, Passport needs
-// to serialize users into and deserialize users out of the session.  In a
-// production-quality application, this would typically be as simple as
-// supplying the user ID when serializing, and querying the user record by ID
-// from the database when deserializing.  However, due to the fact that this
-// example does not have a database, the complete Twitter profile is serialized
-// and deserialized.
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
+passport.serializeUser((user, cb) => cb(null, user));
+passport.deserializeUser((obj, cb) => cb(null, obj));
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
-
-
-// Create a new Express application.
-var app = express();
-
-// Configure view engine to render EJS templates.
-app.set('views', __dirname + '/views');
+app.set('views', path.resolve(__dirname + '/views'));
 app.set('view engine', 'ejs');
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require('morgan')('combined'));
-app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(logger('combined'));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
@@ -74,30 +40,41 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// Define routes.
-app.get('/',
-  function(req, res) {
-    res.render('home', { user: req.user });
+// Función que verifica que el usuario está en una organización
+
+function middlewareOrganization (req, res, next) {
+  const client = github.client({id: clientID, secret: clientSecret})
+
+  client.get(`/users/${req.user.username}/orgs`, {}, function (err, status, body, headers) {
+    for(let org of body) {
+      if (org.login === organizacion) {
+        return next()
+      }
+    }
+    res.render('error', {error: 'No tienes permisos para ver el libro'})
   });
+}
 
-app.get('/login',
-  function(req, res){
-    res.render('login');
-  });
 
-app.get('/login/github',
-  passport.authenticate('github'));
+app.get('/login', (req, res) => {
+  if (req.isAuthenticated()) return res.redirect('/')
+  res.render('login')
+})
 
-app.get('/login/github/return', 
+app.get('/login/github', passport.authenticate('github'));
+
+app.get('/login/github/return',
   passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
+  (req, res) => {
     res.redirect('/');
   });
 
-app.get('/profile',
-  require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.render('profile', { user: req.user });
-  });
+app.get('/assets/*', express.static('assets'))
 
-app.listen(8080);
+app.get('*', ensureLoggedIn('/login'), middlewareOrganization, express.static('gh-pages'))
+
+app.use((req, res) => res.render('error', {error: 'Tienes que desplegar el libro al menos una vez'}))
+
+const port = process.env.PORT || 8080
+console.log(`Express escuchando en puerto ${port}`)
+app.listen(port)
