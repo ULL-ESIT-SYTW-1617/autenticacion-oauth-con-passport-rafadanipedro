@@ -47,7 +47,7 @@ Para realizar la aplicación, se deben realizar una serie de pasos:
 * Registrar la nueva aplicación.
 ![OauthApplication](https://github.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/blob/master/capturas_readme/captura_enlace_oauth.png)
 
-![Registrar nueva app](https://github.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/blob/master/capturas_readme/captura_boton_registrar_app.png)
+![Registrar nueva app](https://raw.githubusercontent.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/master/capturas_readme/captura_boton_registrar_app.png)
 
 * Una vez se accede al menú de registro de nueva aplicación, se debe añadir un nombre a a la aplicación.
 ![Añadir descripcion](https://github.com/ULL-ESIT-SYTW-1617/autenticacion-oauth-con-passport-rafadanipedro/blob/master/capturas_readme/captura_creacion_app.png)
