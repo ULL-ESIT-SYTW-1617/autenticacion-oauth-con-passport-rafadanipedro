@@ -76,6 +76,6 @@ const questions = [
 
 export default async function config () {
   let cfg = await inquirer.prompt(questions)
-  if (cfg.privateKey[0] === '~') cfg.privateKey = `${process.env.HOME}${config.privateKey.substr(1)}`
+  if (cfg.privateKey[0] === '~') cfg.privateKey = `${process.env.HOME}${cfg.privateKey.substr(1)}`
   return cfg
 }
