@@ -45,6 +45,7 @@ Para permitir que una aplicación web pueda acceder a la plataforma Github, hay 
 Para realizar la aplicación, se deben realizar una serie de pasos:
 
 * Registrar la nueva aplicación.  
+  
 ![OauthApplication](https://s16.postimg.org/uho7li4hh/captura_enlace_oauth.png)
 
 ![Registrar nueva app](https://s16.postimg.org/d1pg62g51/captura_boton_registrar_app.png)
