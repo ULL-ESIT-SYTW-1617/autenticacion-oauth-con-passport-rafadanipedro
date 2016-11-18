@@ -44,12 +44,13 @@ Para permitir que una aplicación web pueda acceder a la plataforma Github, hay 
 
 Para realizar la aplicación, se deben realizar una serie de pasos:
 
-* Registrar la nueva aplicación.
+* Registrar la nueva aplicación.  
 ![OauthApplication](https://s16.postimg.org/uho7li4hh/captura_enlace_oauth.png)
 
 ![Registrar nueva app](https://s16.postimg.org/d1pg62g51/captura_boton_registrar_app.png)
 
-* Una vez se accede al menú de registro de nueva aplicación, se debe añadir un nombre a a la aplicación.
+* Una vez se accede al menú de registro de nueva aplicación, se debe añadir un nombre a a la aplicación.  
+  
 ![Añadir descripcion](https://s16.postimg.org/ofbzh9qnp/captura_creacion_app.png)
 * A continuación, se debe añadir el enlace de la aplicación principal.El enlace debe tener el siguiente formato: `http(s)://hostname`
 * Finalmente, se añade una pequeña descripción a la aplicación creada y se le añade la authorization callback url que debe tener el siguiente formato: `http(s)://hostname/auth/github_oauth/callback`
